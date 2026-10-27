@@ -69,6 +69,7 @@ static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
 
 /* USER CODE BEGIN PFP */
+static void TIM2_PWM_Start_Config(void);
 static void Start_PWM(void);
 static void Stop_PWM(void);
 static void UART_Send(const char *message);
@@ -76,7 +77,14 @@ static void UART_Send(const char *message);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+static void TIM2_PWM_Start_Config(void)
+{
+    __HAL_TIM_SET_AUTORELOAD(&htim2, 10069U);
+    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 70U);
+    __HAL_TIM_SET_COUNTER(&htim2, 0U);
+    __HAL_TIM_CLEAR_FLAG(&htim2, TIM_CHANNEL_1);
+    __HAL_TIM_DISABLE_IT(&htim2, TIM_IT_UPDATE);
+}
 static void UART_Send(const char *message)
 {
     HAL_UART_Transmit(&huart2,(uint8_t *)message, (uint16_t)strlen(message), HAL_MAX_DELAY);
@@ -87,11 +95,7 @@ static void Start_PWM(void)
     pulse_count = 0U;
     adc_read_request = 0U;
 
-    __HAL_TIM_SET_AUTORELOAD(&htim2, 10069U);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 70U);
-    __HAL_TIM_SET_COUNTER(&htim2, 0U);
-    __HAL_TIM_CLEAR_FLAG(&htim2, TIM_FLAG_UPDATE);
-    __HAL_TIM_DISABLE_IT(&htim2, TIM_IT_UPDATE);
+    TIM2_PWM_Start_Config();
 
     if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1) != HAL_OK)
     {
@@ -103,7 +107,7 @@ static void Start_PWM(void)
 }
 
 static void Stop_PWM(void)
-{
+{/*command*/
     pwm_enabled = 0U;
     adc_read_request = 0U;
 
@@ -175,11 +179,7 @@ int main(void)
     adc_read_request = 0U;
     button_message_request = 0U;
 
-    __HAL_TIM_SET_AUTORELOAD(&htim2, 10069U);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 70U);
-    __HAL_TIM_SET_COUNTER(&htim2, 0U);
-    __HAL_TIM_CLEAR_FLAG(&htim2, TIM_FLAG_UPDATE);
-    __HAL_TIM_DISABLE_IT(&htim2, TIM_IT_UPDATE);
+    TIM2_PWM_Start_Config();
 
     if (ADS1220_Init() == HAL_OK)
     {
