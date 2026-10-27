@@ -1,0 +1,5 @@
+../Core/Src/ADS1220.c:13:26:ADS1220_SendCommand	24	static
+../Core/Src/ADS1220.c:27:19:ADS1220_Init	16	static
+../Core/Src/ADS1220.c:60:26:ADS1220_WaitReady	24	static
+../Core/Src/ADS1220.c:74:19:ADS1220_ReadRaw	32	static
+../Core/Src/ADS1220.c:112:19:ADS1220_ReadVoltage	40	static
